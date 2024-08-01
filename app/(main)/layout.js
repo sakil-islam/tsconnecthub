@@ -1,8 +1,6 @@
 import { MainNav } from "@/components/main-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+
 const navLinks = [
   {
     title: "Features",
