@@ -57,6 +57,27 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  /* gradient border */
+  .gradient-border {
+    background: linear-gradient(#fff, #fff) padding-box,
+      linear-gradient(45deg, #8884ff 0%, #b55dfd 100%) border-box;
+    border: solid 3px transparent;
+  }
+
+  /* text gradient */
+  .gradient-text {
+    background: linear-gradient(-25deg, #5662f6 0%, #7fffd4 100%);
+    background-clip: text;
+    -webkit-background-clip: text; /* For Safari support */
+    color: transparent;
+  }
+
+  /* hover and scale effect */
+  .both:hover {
+    transform: translateY(-8px);
+    transform: scale(1.05, 1.05);
+  }
 }
 
 @layer base {
