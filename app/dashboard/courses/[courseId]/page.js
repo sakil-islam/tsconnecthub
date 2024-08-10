@@ -18,6 +18,8 @@ import { QuizSetForm } from "./_components/quiz-set-form";
 import { getCategories } from "@/queries/categories";
 import { getCourseDetails } from "@/queries/courses";
 
+import { replaceMongoIdInArray } from "@/lib/convertData";
+
 const EditCourse = async ({ params: { courseId } }) => {
   const course = await getCourseDetails(courseId);
   const categories = await getCategories();
@@ -28,6 +30,10 @@ const EditCourse = async ({ params: { courseId } }) => {
       id: c.id,
     };
   });
+
+  const modules = replaceMongoIdInArray(course?.modules).sort(
+    (a, b) => a.order - b.order
+  );
 
   return (
     <>
@@ -76,7 +82,7 @@ const EditCourse = async ({ params: { courseId } }) => {
                 <h2 className="text-xl">Course Modules</h2>
               </div>
 
-              <ModulesForm initialData={[]} courseId={[]} />
+              <ModulesForm initialData={modules} courseId={courseId} />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
