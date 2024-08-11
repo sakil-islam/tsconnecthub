@@ -1,13 +1,11 @@
 "use client";
 import * as z from "zod";
-// import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,22 +14,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { doCreateQuizSet } from "@/app/actions/quiz";
+
 const formSchema = z.object({
   title: z.string().min(1, {
     message: "Title is required!",
   }),
 });
 
-const AddQuizSet = () => {
+export const AddQuizSetForm = () => {
   const router = useRouter();
 
   const form = useForm({
@@ -45,7 +37,8 @@ const AddQuizSet = () => {
 
   const onSubmit = async (values) => {
     try {
-      router.push(`/dashboard/quiz-sets/${1}`);
+      const quizSetId = await doCreateQuizSet(values);
+      router.push(`/dashboard/quiz-sets/${quizSetId}`);
       toast.success("Quiz Set Created");
     } catch (error) {
       toast.error("Something went wrong");
@@ -94,5 +87,3 @@ const AddQuizSet = () => {
     </div>
   );
 };
-
-export default AddQuizSet;
