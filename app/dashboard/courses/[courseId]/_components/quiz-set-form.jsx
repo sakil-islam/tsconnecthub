@@ -18,27 +18,16 @@ import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { updateQuizSetForCourse } from "@/app/actions/course";
 
 const formSchema = z.object({
   quizSetId: z.string().min(1),
 });
 
-export const QuizSetForm = ({
-  initialData,
-  courseId,
-  options = [
-    {
-      value: "quiz_set_1",
-      label: "Quiz Set 1",
-    },
-    {
-      value: "2",
-      label: "Quiz Set 2",
-    },
-  ],
-}) => {
+export const QuizSetForm = ({ initialData, courseId, options }) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
+  const foundMatch = options.find((o) => o.value === initialData.quizSetId);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -53,6 +42,8 @@ export const QuizSetForm = ({
 
   const onSubmit = async (values) => {
     try {
+      console.log(values);
+      await updateQuizSetForCourse(courseId, values);
       toast.success("Course updated");
       toggleEdit();
       router.refresh();
@@ -83,7 +74,11 @@ export const QuizSetForm = ({
             !initialData.quizSetId && "text-slate-500 italic"
           )}
         >
-          {"No quiz set selected"}
+          {foundMatch ? (
+            <span>{foundMatch.label}</span>
+          ) : (
+            <span>"No quiz set selected"</span>
+          )}
         </p>
       )}
       {console.log({ options })}
