@@ -1,7 +1,6 @@
 "use client";
 
 import * as z from "zod";
-// import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -16,12 +15,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { PlusCircle } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { addQuizToQuizSet } from "@/app/actions/quiz";
 
 const formSchema = z.object({
   title: z
@@ -80,7 +77,7 @@ const formSchema = z.object({
   }),
 });
 
-export const AddQuizForm = ({ setQuizes }) => {
+export const AddQuizForm = ({ quizSetId }) => {
   const router = useRouter();
 
   const form = useForm({
@@ -115,39 +112,46 @@ export const AddQuizForm = ({ setQuizes }) => {
     try {
       console.log({ values });
 
-      const structuredQuiz = {
-        id: Date.now(),
-        title: values.title,
-        options: [
-          values.optionA,
-          values.optionB,
-          values.optionC,
-          values.optionD,
-        ],
-      };
-      setQuizes((prevQuizes) => [...prevQuizes, structuredQuiz]);
-      form.reset({
-        title: "",
-        description: "",
-        optionA: {
-          label: "",
-          isTrue: false,
-        },
-        optionB: {
-          label: "",
-          isTrue: false,
-        },
-        optionC: {
-          label: "",
-          isTrue: false,
-        },
-        optionD: {
-          label: "",
-          isTrue: false,
-        },
-      });
-      toggleEdit();
-      router.refresh();
+      const correctness = [
+        values.optionA.isTrue,
+        values.optionB.isTrue,
+        values.optionC.isTrue,
+        values.optionD.isTrue,
+      ];
+
+      const correctMarked = correctness.filter((c) => c);
+
+      const isOneCorrectMarked = correctMarked.length === 1;
+
+      if (isOneCorrectMarked) {
+        // Call server action
+        await addQuizToQuizSet(quizSetId, values);
+        // Reset the form
+        form.reset({
+          title: "",
+          description: "",
+          optionA: {
+            label: "",
+            isTrue: false,
+          },
+          optionB: {
+            label: "",
+            isTrue: false,
+          },
+          optionC: {
+            label: "",
+            isTrue: false,
+          },
+          optionD: {
+            label: "",
+            isTrue: false,
+          },
+        });
+
+        router.refresh();
+      } else {
+        toast.error("You must mark only one correct answer.");
+      }
     } catch (error) {
       toast.error("Something went wrong");
     }
