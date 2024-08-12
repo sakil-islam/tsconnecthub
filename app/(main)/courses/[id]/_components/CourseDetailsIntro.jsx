@@ -6,11 +6,9 @@ import { EnrollCourse } from "@/components/enroll-course";
 import { hasEnrollmentForCourse } from "@/queries/enrollments";
 import { getUserByEmail } from "@/queries/users";
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 
 const CourseDetailsIntro = async ({ course }) => {
   const session = await auth();
-  if (!session?.user) redirect("/login");
   const loggedInUser = await getUserByEmail(session?.user?.email);
   const hasEnrollment = await hasEnrollmentForCourse(
     course?.id,
@@ -35,7 +33,10 @@ const CourseDetailsIntro = async ({ course }) => {
 
               <div className="mt-6 flex items-center justify-center flex-wrap gap-3">
                 {hasEnrollment ? (
-                  <Link href="" className={cn(buttonVariants({ size: "lg" }))}>
+                  <Link
+                    href={`/courses/${course?.id}/lesson`}
+                    className={cn(buttonVariants({ size: "lg" }))}
+                  >
                     Access Course
                   </Link>
                 ) : (
