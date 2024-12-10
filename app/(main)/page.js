@@ -33,7 +33,7 @@ const HomePage = async () => {
           <span className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium border shadow-lg">
             Hey, Welcome
           </span>
-          <h1 className="font-heading text-3xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="font-heading text-3xl font-bold sm:text-5xl md:text-6xl lg:text-7xl gradient-text">
             Learn Today, Lead Tomorrow.
           </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
@@ -43,7 +43,7 @@ const HomePage = async () => {
           <div className="flex items-center gap-3 flex-wrap justify-center">
             <Link
               href="/courses"
-              className={cn(buttonVariants({ size: "lg" }))}
+              className={cn(buttonVariants({ variant: "but3d", size: "lg" }))}
             >
               Explore Now
             </Link>
@@ -51,7 +51,7 @@ const HomePage = async () => {
               href="/register/instructor"
               className={cn(
                 buttonVariants({
-                  variant: "outline",
+                  // variant: "but3d",
                   size: "lg",
                 })
               )}
